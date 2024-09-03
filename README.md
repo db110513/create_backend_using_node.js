@@ -92,6 +92,6 @@
 
      const UserModel = require('./model/user.model');
 
- · Opem Mongo DB Compass
+ · Opem Mongo DB Compass and Connect
 
  · 
