@@ -47,7 +47,7 @@
       const mongoose = require('mongoose');
 
       const connection = mongoose.createConnection(
-          'mongodb://localhost:27017').on('open', () => {
+          'mongodb://localhost:27017/TODO').on('open', () => {
               console.log('MongoDB connected');
           }).on('error', () => {
               console.log('MongoDB connection error');
@@ -66,7 +66,7 @@
 
  · /model/user.model.js
 
-     const mongoose = require('mongoose');
+    const mongoose = require('mongoose');
     const db = require('../config/db');
     
     const {Schema} = mongoose;
@@ -91,3 +91,7 @@
  · Add to index.js
 
      const UserModel = require('./model/user.model');
+
+ · Opem Mongo DB Compass
+
+ · 
