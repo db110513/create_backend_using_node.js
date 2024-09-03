@@ -60,9 +60,15 @@
 
     const db = require('./config/db');
 
+
+
+
  · exit server by > ctrl D
  
  · run project > npm run dev
+
+
+
 
  · /model/user.model.js
 
