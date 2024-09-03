@@ -57,4 +57,10 @@
       module.exports = connection;          
 
  · index.js
-    
+
+    Add:
+
+    const db = require('./config/db');
+
+
+
