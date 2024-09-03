@@ -1,21 +1,24 @@
 # js_back
 
-  · npm init -y
-  · npm i express mongoose body-parser jsonwebtoken bcrypt nodemon
+    · npm init -y
+    · npm i express mongoose body-parser jsonwebtoken bcrypt nodemon
 
   · package.json
+  
       "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "dev": "nodemon index"
       },
   
   · app.js
+  
     const express = require('express');
     const app = express();
 
     module.exports = app;
   
   · index.js
+      
       const app = require('./app');
 
       const port = 3000;
