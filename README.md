@@ -46,7 +46,7 @@
     
       const mongoose = require('mongoose');
 
-      const connection = mongoose.connection(
+      const connection = mongoose.connect(
           'mongodb://localhost:27017').on('open', () => {
               console.log('MongoDB connected');
           }).on('error', () => {
