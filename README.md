@@ -100,4 +100,21 @@
 
  · Opem Mongo DB Compass and Connect
 
- · 
+ · Create 3 files
+     
+     ./controller/user.controller.js
+     ./routes/user.routes.js
+     ./services/user.services
+
+
+
+
+
+
+
+
+
+
+
+
+     
