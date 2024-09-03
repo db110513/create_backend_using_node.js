@@ -32,3 +32,28 @@
       });      
       
       module.exports = app;
+
+  · Create 4 folders
+
+      config
+      services
+      controllers
+      model
+      routes
+
+
+  · ./config/db.js
+    
+      const mongoose = require('mongoose');
+
+        const connection = mongoose.connection(
+            'mongodb://localhost:27017').on('open', () => {
+                console.log('MongoDB connected');
+            }).on('error', () => {
+                console.log('MongoDB connection error');
+            });
+        ;
+        
+        module.exports = connection;
+          
+    
