@@ -56,9 +56,7 @@
         
       module.exports = connection;          
 
- · index.js
-
-    Add:
+ · Add to index.js
 
     const db = require('./config/db');
 
@@ -89,3 +87,7 @@
     const UserModel = db.model('user', userSchema);
     
     module.exports = UserModel;
+
+ · Add to index.js
+
+     const UserModel = require('./model/user.model');
