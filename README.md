@@ -70,7 +70,7 @@
 **
 
 
- · /model/user.model.js
+ · ./model/user.model.js
 
     const mongoose = require('mongoose');
     const db = require('../config/db');
@@ -104,7 +104,7 @@
      
      ./controller/user.controller.js
      ./routes/user.routes.js
-     ./services/user.services
+     ./services/user.services.js
 
  · ./services/user.services
 
@@ -126,7 +126,21 @@
 
      module.exports = UserService;
 
+ · ./controllers/user.controller.js
 
+    const  UserService = require('../services/user.services');
+
+    exports.register = async(req, res, next) => {
+        try {
+            const  {} = req.body;
+            const successRes = await UserService.registerUser(mail, password);
+            res.json({status : true, success: 'User registred successfully!'})
+        } 
+        
+        catch (e) {
+            throw e;
+        }
+    }
 
 
 
