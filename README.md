@@ -106,7 +106,7 @@
      ./routes/user.routes.js
      ./services/user.services.js
 
- · ./services/user.services
+ · ./services/user.services.js
 
      const UserModel = require("../model/user.model");
 
@@ -132,21 +132,76 @@
 
     exports.register = async(req, res, next) => {
         try {
-            const  {} = req.body;
-            const successRes = await UserService.registerUser(mail, password);
+            const  { email, password } = req.body;
+            const successRes = await UserService.registerUser(email, password);
             res.json({status : true, success: 'User registred successfully!'})
         } 
         
         catch (e) {
-            throw e;
+            next(e);
         }
     }
 
+ · ./routes/user.routes.js
 
+    const router = require('express').Router();
+    const UserController = require('../controllers/user.controller');
+    
+    router.post('/registration', UserController.register);
+    
+    module.exports = router;
 
+ · Update app.js
 
+    const express = require('express');
+    const app = express();
+    
+    const bodyParser = require('body-parser');
+    const userRouter = require('./routes/user.routes');
+    
+    app.use(bodyParser.json());
+    
+    app.use('/', userRouter);
+    
+    module.exports = app;
 
+ · Update user.model.js to crypt the password
 
+    const mongoose = require('mongoose');
+    const db = require('../config/db');
+    const bcrypt = require('bcrypt');
+    
+    const {Schema} = mongoose;
+    
+    const userSchema = new Schema({
+        email : {
+            type : String,
+            lowercase : true,
+            unique : true,
+            required : true
+        },
+        password : {
+            type : String,
+            required : true
+        }
+    });
+    
+    userSchema.pre('save', async function(params) {
+        try {
+            var user = this;
+            const salt = await (bcrypt.salt(10));
+            const hashpwd = await bcrypt.hash(user.password, salt)
+            user.password = hashpwd;
+        } 
+        
+        catch (e) {
+            next(e);
+        }
+    })
+    
+    const UserModel = db.model('user', userSchema);
+
+module.exports = UserModel;
 
 
      
