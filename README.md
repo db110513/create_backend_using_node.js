@@ -186,7 +186,7 @@
         }
     });
     
-    userSchema.pre('save', async function(params) {
+    userSchema.pre('save', async function() {
         try {
             var user = this;
             const salt = await (bcrypt.salt(10));
@@ -200,8 +200,7 @@
     })
     
     const UserModel = db.model('user', userSchema);
-
-module.exports = UserModel;
+    module.exports = UserModel;
 
 
      
