@@ -98,7 +98,7 @@
 
      const UserModel = require('./model/user.model');
 
- · Opem Mongo DB Compass and Connect
+ · Open Mongo DB Compass and Connect it
 
  · Create 3 files
      
