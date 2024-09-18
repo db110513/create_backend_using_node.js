@@ -156,19 +156,64 @@
 
  · ./controllers/user.controller.js
 
-    const  UserService = require('../services/user.services');
+        const UserServices = require('../services/user.service');
 
-    exports.register = async(req, res, next) => {
-        try {
-            const  { email, password } = req.body;
-            const successRes = await UserService.registerUser(email, password);
-            res.json({status : true, success: 'User registred successfully!'})
-        } 
+        exports.register = async (req, res, next) => {
+            try {
+                console.log("---req body---", req.body);
+                const { email, password } = req.body;
+                const duplicate = await UserServices.getUserByEmail(email);
+
+                if (duplicate) {
+                    throw new Error(`UserName ${email}, Already Registered`)
+                }
+                
+                const response = await UserServices.registerUser(email, password);
         
-        catch (e) {
-            next(e);
+                res.json({ status: true, success: 'User registered successfully' });
+                
+            }
+            
+            catch (e) {
+                console.log("---> e -->", err);
+                next(e);
+            }
         }
-    }
+
+        exports.login = async (req, res, next) => {
+            try {
+        
+                const { email, password } = req.body;
+        
+                if (!email || !password) {
+                    throw new Error('Parameter are not correct');
+                }
+                
+                let user = await UserServices.checkUser(email);
+
+                if (!user) {
+                    throw new Error('User does not exist');
+                }
+        
+                const isPasswordCorrect = await user.comparePassword(password);
+        
+                if (isPasswordCorrect === false) {
+                    throw new Error(`Username or Password does not match`);
+                }
+        
+                let tokenData;
+                tokenData = { _id: user._id, email: user.email };
+            
+                const token = await UserServices.generateAccessToken(tokenData,"secret","1h")
+        
+                res.status(200).json({ status: true, success: "sendData", token: token });
+            } 
+            
+            catch (error) {
+                console.log(error, 'err---->');
+                next(error);
+            }
+        }
 
  · ./routes/user.routes.js
     
@@ -179,8 +224,7 @@
     
     router.post("/login", UserController.login);
 
-
-module.exports = router;
+    module.exports = router;
 
  · Update app.js
 
@@ -196,42 +240,4 @@ module.exports = router;
     
     module.exports = app;
 
- · Update user.model.js to crypt the password
-
-    const mongoose = require('mongoose');
-    const db = require('../config/db');
-    const bcrypt = require('bcrypt');
-    
-    const {Schema} = mongoose;
-    
-    const userSchema = new Schema({
-        email : {
-            type : String,
-            lowercase : true,
-            unique : true,
-            required : true
-        },
-        password : {
-            type : String,
-            required : true
-        }
-    });
-    
-    userSchema.pre('save', async function() {
-        try {
-            var user = this;
-            const salt = await (bcrypt.salt(10));
-            const hashpwd = await bcrypt.hash(user.password, salt)
-            user.password = hashpwd;
-        } 
-        
-        catch (e) {
-            next(e);
-        }
-    })
-    
-    const UserModel = db.model('user', userSchema);
-    module.exports = UserModel;
-
-
-     
+ 
