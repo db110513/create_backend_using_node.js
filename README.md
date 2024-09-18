@@ -12,26 +12,31 @@
   
   · app.js
   
-    const express = require('express');
+    const express = require("express");
+    const bodyParser = require("body-parser")
+    const UserRoute = require("./routes/user.routes");
+    const ToDoRoute = require('./routes/todo.router');
     const app = express();
-
+    
+    app.use(bodyParser.json())
+    
+    app.use("/",UserRoute);
+    app.use("/",ToDoRoute);
+    
     module.exports = app;
   
   · index.js
+
+    const app = require("./app");
+    const db = require('./config/db')
+
+    const port = 3000;
+    
+    app.listen(port,()=>{
+        console.log(`Server Listening on Port http://localhost:${port}`);
+    })
       
-      const app = require('./app');
-
-      const port = 3000;
-
-      app.listen(port, () => {
-        console.log(`Server running on port http://localhost:${port}`);
-      });
-
-      app.get('/', (req, res) => {
-          res.send('Hello DBG');
-      });      
-      
-      module.exports = app;
+    module.exports = app;
 
   · Create 4 folders
 
@@ -46,20 +51,13 @@
     
       const mongoose = require('mongoose');
 
-      const connection = mongoose.createConnection(
-          'mongodb://localhost:27017/db').on('open', () => {
-              console.log('MongoDB connected');
-          }).on('error', () => {
-              console.log('MongoDB connection error');
-          });
-      ;
-        
+      const connection = mongoose.createConnection(`mongodb://127.0.0.1:27017/ToDoDB`)
+          .on('open',()=>{console.log("MongoDBConnected");})
+              .on('error',()=>{
+                  console.log("MongoDB Connection error");
+              });
+    
       module.exports = connection;          
-
- · Add to index.js
-
-    const db = require('./config/db');
-
 
 **
 
@@ -72,31 +70,61 @@
 
  · ./model/user.model.js
 
-    const mongoose = require('mongoose');
     const db = require('../config/db');
-    
-    const {Schema} = mongoose;
+    const bcrypt = require("bcrypt");
+    const mongoose = require('mongoose');
+    const { Schema } = mongoose;
     
     const userSchema = new Schema({
-        email : {
-            type : String,
-            lowercase : true,
-            unique : true,
-            required : true
+        email: {
+            type: String,
+            lowercase: true,
+            required: [true, "userName can't be empty"],
+           
+            match: [
+                /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/,
+                "userName format is not correct",
+            ],
+            unique: true,
         },
-        password : {
-            type : String,
-            required : true
+
+        password: {
+            type: String,
+            required: [true, "password is required"],
+        },
+    },{timestamps:true});
+    
+    userSchema.pre("save",async function(){
+        var user = this;
+        if(!user.isModified("password")){
+            return
+        }
+        try{
+            const salt = await bcrypt.genSalt(10);
+            const hash = await bcrypt.hash(user.password,salt);
+    
+            user.password = hash;
+        }catch(err){
+            throw err;
         }
     });
     
-    const UserModel = db.model('user', userSchema);
     
+    userSchema.methods.comparePassword = async function (candidatePassword) {
+        try {
+            console.log('----------------no password',this.password);
+            // @ts-ignore
+            const isMatch = await bcrypt.compare(candidatePassword, this.password);
+            return isMatch;
+        }
+        
+        catch (error) {
+            throw error;
+        }
+    };
+    
+    const UserModel = db.model('user', userSchema);
     module.exports = UserModel;
-
- · Add to index.js
-
-     const UserModel = require('./model/user.model');
 
  · Open Mongo DB Compass and Connect it
 
@@ -143,13 +171,16 @@
     }
 
  · ./routes/user.routes.js
+    
+    const router = require("express").Router();
+    const UserController = require('../controller/user.controller');
+    
+    router.post("/register",UserController.register);
+    
+    router.post("/login", UserController.login);
 
-    const router = require('express').Router();
-    const UserController = require('../controllers/user.controller');
-    
-    router.post('/registration', UserController.register);
-    
-    module.exports = router;
+
+module.exports = router;
 
  · Update app.js
 
