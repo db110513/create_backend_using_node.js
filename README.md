@@ -1,7 +1,7 @@
 # BACKEND
 
-    · npm init -y
-    · npm i express mongoose body-parser jsonwebtoken bcrypt nodemon
+    npm init -y
+    npm i express mongoose body-parser jsonwebtoken bcrypt nodemon
 
   · package.json
   
