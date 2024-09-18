@@ -33,7 +33,7 @@
     const port = 3000;
     
     app.listen(port,()=>{
-        console.log(`Server Listening on Port http://localhost:${port}`);
+        console.log(`Server running on port http://localhost:${port}`);
     })
       
     module.exports = app;
@@ -127,23 +127,48 @@
 
  · ./services/user.services.js
 
-     const UserModel = require("../model/user.model");
+     const UserModel = require("../models/user.model");
+    const jwt = require("jsonwebtoken");
 
-     class UserService {
-    
-         static async registerUser(mail, password) {
-             try {
-                 const createUser = new UserModel({mail, password});
-                 return await createUser.save();
-             } 
+    class UserServices{
+     
+        static async registerUser(email,password){
+            try{
+                    console.log("-----Email --- Password-----",email,password);
+                    
+                    const createUser = new UserModel({email,password});
+                    return await createUser.save();
+            }
             
-             catch (e) {
-                 throw e;
-             }
-         }
-     }
-
-     module.exports = UserService;
+            catch(e){
+                throw e;
+            }
+        }
+    
+        static async getUserByEmail(email){
+            try{
+                return await UserModel.findOne({email});
+            }catch(err){
+                console.log(err);
+            }
+        }
+    
+        static async checkUser(email){
+            try {
+                return await UserModel.findOne({email});
+            }
+            
+            catch (e) {
+                throw e;
+            }
+        }
+    
+        static async generateAccessToken(tokenData,JWTSecret_Key,JWT_EXPIRE){
+            return jwt.sign(tokenData, JWTSecret_Key, { expiresIn: JWT_EXPIRE });
+        }
+    }
+    
+    module.exports = UserServices;
 
  · ./controllers/user.controller.js
 
