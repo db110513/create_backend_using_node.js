@@ -59,15 +59,6 @@
     
       module.exports = connection;          
 
-**
-
- · exit server by > ctrl D
- 
- · run project > npm run dev
-
-**
-
-
  · ./model/user.model.js
 
     const db = require('../config/db');
