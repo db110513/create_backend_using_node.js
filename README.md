@@ -240,5 +240,7 @@
       
     module.exports = app;
 
+npm run dev
+
 
  
