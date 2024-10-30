@@ -86,7 +86,7 @@
 
  · Create 3 files
      
-     ./controller/user.controller.js
+     ./controllers/user.controller.js
      ./routes/user.routes.js
      ./services/user.services.js
 
@@ -199,7 +199,7 @@
  · ./routes/user.routes.js
     
     const router = require("express").Router();
-    const UserController = require('../controller/user.controller');
+    const UserController = require('../controllers/user.controller');
     
     router.post("/register",UserController.register);
     
