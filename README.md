@@ -3,41 +3,6 @@
     npm init -y
     npm i express mongoose body-parser jsonwebtoken bcrypt nodemon
 
-  · package.json
-  
-      "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "nodemon index"
-      },
-  
-  · app.js
-  
-    const express = require("express");
-    const bodyParser = require("body-parser")
-    const UserRoute = require("./routes/user.routes");
-    const ToDoRoute = require('./routes/todo.router');
-    const app = express();
-    
-    app.use(bodyParser.json())
-    
-    app.use("/",UserRoute);
-    app.use("/",ToDoRoute);
-    
-    module.exports = app;
-  
-  · index.js
-
-    const app = require("./app");
-    const db = require('./config/db')
-
-    const port = 3000;
-    
-    app.listen(port,()=>{
-        console.log(`Server running on port http://localhost:${port}`);
-    })
-      
-    module.exports = app;
-
   · Create 4 folders
 
       config
@@ -242,18 +207,40 @@
 
     module.exports = router;
 
- · Update app.js
-
-    const express = require('express');
+· package.json
+  
+      "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "nodemon index"
+      },
+  
+  · app.js
+  
+    const express = require("express");
+    const bodyParser = require("body-parser")
+    const UserRoute = require("./routes/user.routes");
+    const ToDoRoute = require('./routes/todo.router');
     const app = express();
     
-    const bodyParser = require('body-parser');
-    const userRouter = require('./routes/user.routes');
+    app.use(bodyParser.json())
     
-    app.use(bodyParser.json());
-    
-    app.use('/', userRouter);
+    app.use("/",UserRoute);
+    app.use("/",ToDoRoute);
     
     module.exports = app;
+  
+  · index.js
+
+    const app = require("./app");
+    const db = require('./config/db')
+
+    const port = 3000;
+    
+    app.listen(port,()=>{
+        console.log(`Server running on port http://localhost:${port}`);
+    })
+      
+    module.exports = app;
+
 
  
