@@ -1,5 +1,9 @@
 # BACKEND
 
+    mkdir random
+    cd random
+    code .
+    
     npm init -y
     npm i express mongoose body-parser jsonwebtoken bcrypt nodemon
 
