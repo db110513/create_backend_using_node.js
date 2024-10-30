@@ -8,7 +8,7 @@
       config
       services
       controllers
-      model
+      models
       routes
 
 
