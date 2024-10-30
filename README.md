@@ -137,7 +137,7 @@
 
  · ./controllers/user.controller.js
 
-        const UserServices = require('../services/user.service');
+        const UserServices = require('../services/user.services');
 
         exports.register = async (req, res, next) => {
             try {
