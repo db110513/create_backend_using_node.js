@@ -82,8 +82,6 @@
     const UserModel = db.model('user', userSchema);
     module.exports = UserModel;
 
- · Open Mongo DB Compass and Connect it
-
  · Create 3 files
      
      ./controllers/user.controller.js
@@ -240,7 +238,11 @@
       
     module.exports = app;
 
-npm run dev
+ Open Mongo DB Compass and Connect it
+ 
+ npm run dev
+
+ 
 
 
  
